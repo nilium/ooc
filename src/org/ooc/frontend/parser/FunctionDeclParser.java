@@ -55,7 +55,22 @@ public class FunctionDeclParser {
 			case TokenType.FINAL_KW: reader.skip(); isFinal = true; break;
 			case TokenType.PROTO_KW: reader.skip(); isProto = true; break;
 			case TokenType.INLINE_KW: reader.skip(); isInline = true; break;
-			case TokenType.EXTERN_KW: externName = ExternParser.parse(sReader, reader); break;
+			case TokenType.SELECTOR_KW:
+				if (externName != null) {
+					throw new CompilationFailedError(sReader.getLocation(reader.peek()),
+							"Cannot specify a selector if the function is declared extern");
+				}
+				
+				selectorName = SelectorParser.parse(sReader, reader);
+				break;
+			case TokenType.EXTERN_KW:
+				if (selectorName != null) {
+					throw new CompilationFailedError(sReader.getLocation(reader.peek()),
+							"Cannot specify extern if the function is declared as a selector");
+				}
+				
+				externName = ExternParser.parse(sReader, reader);
+				break;
 			default: break keywordRead;
 			}
 			kw = reader.peek();
