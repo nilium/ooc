@@ -186,6 +186,12 @@ public class CallWriter {
 		
 		FunctionDecl impl = memberCall.getImpl();
 		writePrelude(cgen, impl, memberCall);
+
+		if(impl.isSelector()) {
+			cgen.current.app("/* [CLASS|OBJECT SELECTOR+ARGS] for "+impl.getName()+" */");
+			return;
+		}
+
 		if(impl.isFromPointer()) {
 			boolean isArrow = memberCall.getExpression().getType().getRef() instanceof ClassDecl;
 			

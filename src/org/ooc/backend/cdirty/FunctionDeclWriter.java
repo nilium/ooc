@@ -33,6 +33,10 @@ public class FunctionDeclWriter {
 				VersionBlockWriter.writeVersionBlockEnd(cgen);
 			}
 			
+		} else if (functionDecl.isSelector()) {
+
+			// do nothing
+
 		} else if(functionDecl.isExtern()) {
 
 			if(functionDecl.isExternWithName()) {
