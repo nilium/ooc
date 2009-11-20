@@ -127,6 +127,7 @@ public final class Token implements Locatable {
 		public static final byte DOUBLE_ARROW = 94; // =>
 		
 		public static final byte SELECTOR_KW = 95; // selector keyword
+		public static final byte NSSTRING_LIT = 96; // @"blah\n"
 		
 	}
 	
@@ -249,7 +250,8 @@ public final class Token implements Locatable {
 			"^",
 			"=>",
 			
-			"selector"
+			"selector",
+			"NSStringLiteral"
 		};
 		
 	}

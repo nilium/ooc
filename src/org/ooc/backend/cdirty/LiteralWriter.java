@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.ooc.frontend.model.FloatLiteral;
 import org.ooc.frontend.model.IntLiteral;
 import org.ooc.frontend.model.StringLiteral;
+import org.ooc.frontend.model.NSStringLiteral;
 import org.ubi.SourceReader;
 
 public class LiteralWriter {
@@ -14,6 +15,8 @@ public class LiteralWriter {
 	}
 
 	public static void writeString(StringLiteral stringLiteral, CGenerator cgen) throws IOException {
+		if (stringLiteral instanceof NSStringLiteral)
+			cgen.current.app("@");
 		cgen.current.app('"');
 		SourceReader.spelled(stringLiteral.getValue(), cgen.current);
 		cgen.current.app('"');

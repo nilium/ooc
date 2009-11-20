@@ -11,6 +11,7 @@ import org.ooc.frontend.model.Literal;
 import org.ooc.frontend.model.Module;
 import org.ooc.frontend.model.NullLiteral;
 import org.ooc.frontend.model.StringLiteral;
+import org.ooc.frontend.model.NSStringLiteral;
 import org.ooc.frontend.model.IntLiteral.Format;
 import org.ooc.frontend.model.tokens.Token;
 import org.ooc.frontend.model.tokens.TokenReader;
@@ -26,6 +27,10 @@ public class LiteralParser {
 		int mark = reader.mark();
 		
 		Token token = reader.read();
+		if(token.type == TokenType.NSSTRING_LIT) {
+			System.out.println("NSString: "+token.get(sReader));
+			return new NSStringLiteral(token.get(sReader), token);
+		}
 		if(token.type == TokenType.STRING_LIT) {
 			return new StringLiteral(token.get(sReader), token);
 		}

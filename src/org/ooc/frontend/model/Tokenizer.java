@@ -173,6 +173,24 @@ public class Tokenizer {
 				continue;
 			}
 			
+			if(c == '@') {
+				reader.read();
+				int mark = reader.mark();
+				if ( reader.read() == '"' ) {
+					try {
+						reader.readStringLiteral();
+					} catch(EOFException eof) {
+						throw new CompilationFailedError(reader.getLocation(index, 0), "Never-ending NSString literal (reached end of file)");
+					}
+					tokens.add(new Token(index + 2,
+							reader.mark() - index - 3,
+							TokenType.NSSTRING_LIT));
+					continue;
+				} else {
+					reader.reset(mark);
+				}
+			}
+			
 			for(CharTuple candidate: chars) {
 				Token token = candidate.handle(index, c, reader);
 				if(token != null) {
