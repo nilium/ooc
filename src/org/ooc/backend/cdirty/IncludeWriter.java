@@ -21,9 +21,9 @@ public class IncludeWriter {
 			cgen.current.nl().app("#endif");
 		}
 		if(include.getMode() == Mode.PATHY) {
-			cgen.current.nl().app("#include <").app(include.getPath()).app(".h>");
+			cgen.current.nl().app("#import <").app(include.getPath()).app(".h>");
 		} else {
-			cgen.current.nl().app("#include \"").app(include.getPath()).app(".h\"");
+			cgen.current.nl().app("#import \"").app(include.getPath()).app(".h\"");
 		}
 		for(Define define: include.getDefines()) {
 			cgen.current.nl().app("#undef ").app(define.name).app(' ');

@@ -71,7 +71,7 @@ public abstract class Driver {
 		toCompile.add(module);
 		done.add(module.getPath());
 		
-		params.compiler.addObjectFile(new File(params.outPath, module.getPath(".c")).getPath());
+		params.compiler.addObjectFile(new File(params.outPath, module.getPath(".m")).getPath());
 		
 		for(Import imp: module.getImports()) {
 			if(!done.contains(imp.getModule().getPath())) {

@@ -98,7 +98,7 @@ public class CGenerator extends Generator implements Visitor {
 		hForwardFile.getParentFile().mkdirs();
 		this.fw = new AwesomeWriter(new CachedFileWriter(hForwardFile));
 		
-		File cFile = new File(outPath, basePath + ".c");
+		File cFile = new File(outPath, basePath + ".m");
 		this.cw = new AwesomeWriter(new CachedFileWriter(cFile));
 		this.current = hw;
 	}
