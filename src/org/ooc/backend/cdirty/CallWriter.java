@@ -186,9 +186,48 @@ public class CallWriter {
 		
 		FunctionDecl impl = memberCall.getImpl();
 		writePrelude(cgen, impl, memberCall);
-
+		
+		TypeDecl typeDecl = impl.getTypeDecl();
+		
 		if(impl.isSelector()) {
-			cgen.current.app("/* [CLASS|OBJECT SELECTOR+ARGS] for "+impl.getName()+" */");
+			String selectorName = impl.getSelector();
+			if(selectorName.equals("")) {
+				selectorName = impl.getName();
+			}
+			
+			cgen.current.app("[");
+			
+			if(impl.isStatic()) {
+				cgen.current.app(typeDecl.getName());
+			} else {
+				memberCall.getExpression().accept(cgen);
+			}
+			
+			cgen.current.app(" ");
+			
+			String[] selector = impl.getSelectorComponents();
+			if ( selector == null ) {
+				selector = new String[] { selectorName }; // hack!
+			}
+			
+			NodeList<Expression> arguments = memberCall.getArguments();
+			if (arguments.isEmpty()) {
+				cgen.current.app(selectorName);
+			} else {
+				int index = 0;
+				for(Expression expr: arguments) {
+					if (index < selector.length) {
+						cgen.current.app(selector[index]+":");
+						index += 1;
+					} else {
+						cgen.current.app(", ");
+					}
+					
+					writeCallArg(expr, impl, index, cgen);
+				}
+			}
+			
+			cgen.current.app("]");
 			return;
 		}
 
@@ -221,8 +260,6 @@ public class CallWriter {
 		}
 		
 		cgen.current.app('(');
-		
-		TypeDecl typeDecl = impl.getTypeDecl();
 		
 		boolean isFirst = true;
 		if(!impl.isStatic()) {
