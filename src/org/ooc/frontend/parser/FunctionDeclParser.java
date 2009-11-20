@@ -45,6 +45,7 @@ public class FunctionDeclParser {
 		boolean isFinal = false;
 		boolean isInline = false;
 		String externName = null;
+		String selectorName = null;
 		
 		Token kw = reader.peek();
 		keywordRead: while(true) {
@@ -110,7 +111,7 @@ public class FunctionDeclParser {
 			functionDecl.setReturnType(returnType);
 		}
 		
-		if(externName != null || isAbstract) {
+		if(externName != null || selectorName != null || isAbstract) {
 			return functionDecl;
 		}
 
