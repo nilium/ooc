@@ -126,6 +126,8 @@ public final class Token implements Locatable {
 		
 		public static final byte DOUBLE_ARROW = 94; // =>
 		
+		public static final byte SELECTOR_KW = 95; // selector keyword
+		
 	}
 	
 	public static final class TokenString {
@@ -245,7 +247,9 @@ public final class Token implements Locatable {
 			
 			" &",
 			"^",
-			"=>"
+			"=>",
+			
+			"selector"
 		};
 		
 	}
