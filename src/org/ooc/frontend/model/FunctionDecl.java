@@ -27,6 +27,9 @@ public class FunctionDecl extends Declaration implements Scope, Generic, MustBeU
 	protected boolean isInline = false;
 	protected boolean fromPointer = false;
 	
+	protected String[] selectorComponents;
+	protected String selectorName;
+	
 	protected TypeDecl typeDecl;
 
 	protected String suffix;
@@ -43,16 +46,24 @@ public class FunctionDecl extends Declaration implements Scope, Generic, MustBeU
 	
 	public FunctionDecl(String name, String suffix, boolean isFinal,
 			boolean isStatic, boolean isAbstract, boolean isExtern, Token startToken) {
-		this(name, suffix, isFinal, isStatic, isAbstract, isExtern ? "" : null, startToken);
+		this(name, suffix, isFinal, isStatic, isAbstract, isExtern ? "" : null, null, startToken);
 	}
 	
 	public FunctionDecl(String name, String suffix, boolean isFinal,
-			boolean isStatic, boolean isAbstract, String externName, Token startToken) {
+			boolean isStatic, boolean isAbstract, boolean isExtern, boolean isSelector,
+			Token startToken) {
+		this(name, suffix, isFinal, isStatic, isAbstract, isExtern ? "" : null, isSelector ? "" : null, startToken);
+	}
+	
+	public FunctionDecl(String name, String suffix, boolean isFinal,
+			boolean isStatic, boolean isAbstract, String externName, String selectorName,
+			Token startToken) {
 		super(name, externName, startToken);
 		this.suffix = suffix;
 		this.isFinal = isFinal;
 		this.isStatic = isStatic;
 		this.isAbstract = isAbstract;
+		this.setSelector(selectorName);
 		this.body = new NodeList<Line>(startToken);
 		this.returnType = name.equals("main") ? IntLiteral.type : Type.getVoid();
 		this.arguments = new NodeList<Argument>(startToken);
@@ -70,7 +81,13 @@ public class FunctionDecl extends Declaration implements Scope, Generic, MustBeU
 		// we should create returnArg in resolve instead, using generateTempName()
 		this.returnArg = new RegularArgument(NullLiteral.type, "__returnArg", startToken);
 	}
-
+/*	
+	public FunctionDecl(String name, String suffix, boolean isFinal,
+			boolean isStatic, boolean isAbstract, String externName, Token startToken) {
+		this(name, suffix, isFinal, isStatic, isAbstract, externName, null, startToken);
+	}
+*/
+	
 	public LinkedHashMap<String, TypeParam> getTypeParams() {
 		return typeParams;
 	}
@@ -511,4 +528,24 @@ public class FunctionDecl extends Declaration implements Scope, Generic, MustBeU
 		return version;
 	}
 	
+	public void setSelector(String selector) {
+		this.selectorName = selector;
+		if ( this.selectorName != null ) {
+			this.selectorComponents = this.selectorName.split(":");
+		} else {
+			this.selectorComponents = null;
+		}
+	}
+	
+	public String getSelector() {
+		return this.selectorName;
+	}
+	
+	public boolean isSelector() {
+		return this.selectorName != null;
+	}
+	
+	public String[] getSelectorComponents() {
+		return this.selectorComponents.clone();
+	}
 }
