@@ -11,12 +11,22 @@ public class RangeLiteral extends Literal implements MustBeResolved {
 
 	protected Expression lower;
 	protected Expression upper;
+	protected boolean isInclusive = false;
 	protected static Type type = new Type("Range", Token.defaultToken);
 	
-	public RangeLiteral(Expression lower, Expression upper, Token startToken) {
+	public RangeLiteral(Expression lower, Expression upper, boolean isInclusive, Token startToken) {
 		super(startToken);
 		this.lower = lower;
 		this.upper = upper;
+		this.isInclusive = isInclusive;
+	}
+	
+	public boolean isInclusive() {
+		return isInclusive;
+	}
+	
+	public void setInclusive(boolean isInclusive) {
+		this.isInclusive = isInclusive;
 	}
 	
 	public Expression getLower() {

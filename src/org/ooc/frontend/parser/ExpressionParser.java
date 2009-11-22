@@ -122,7 +122,7 @@ public class ExpressionParser {
 							"Expected expression for the upper part of a range literal");
 				}
 				// this is so beautiful it makes me wanna cry
-				expr = new RangeLiteral(expr, upper, expr.startToken);
+				expr = new RangeLiteral(expr, upper, false, expr.startToken);
 				
 			}
 			
