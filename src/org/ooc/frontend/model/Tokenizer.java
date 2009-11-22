@@ -64,6 +64,8 @@ public class Tokenizer {
 		new Name("long", TokenType.LONG),
 		new Name("union", TokenType.UNION),
 		new Name("struct", TokenType.STRUCT),
+		new Name("inclusive", TokenType.INCLUSIVE_KW),
+		new Name("exclusive", TokenType.EXCLUSIVE_KW),
 	};
 	
 	protected static class CharTuple {

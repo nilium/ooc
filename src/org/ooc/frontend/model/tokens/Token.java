@@ -126,6 +126,8 @@ public final class Token implements Locatable {
 		
 		public static final byte DOUBLE_ARROW = 94; // =>
 		
+		public static final byte INCLUSIVE_KW = 95; // inclusive keyword
+		public static final byte EXCLUSIVE_KW = 96; // exclusive keyword
 	}
 	
 	public static final class TokenString {
@@ -245,7 +247,10 @@ public final class Token implements Locatable {
 			
 			" &",
 			"^",
-			"=>"
+			"=>",
+			
+			"inclusive",
+			"exclusive"
 		};
 		
 	}
