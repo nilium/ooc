@@ -40,6 +40,7 @@ public class ControlStatementWriter {
 	public static void writeForeach(Foreach foreach, CGenerator cgen) throws IOException {
 		if(foreach.getCollection() instanceof RangeLiteral) {
 			RangeLiteral range = (RangeLiteral) foreach.getCollection();
+			boolean isInclusive = range.isInclusive();
 			
 			cgen.current.app("for (");
 			
@@ -56,7 +57,7 @@ public class ControlStatementWriter {
 					cgen.current.app("; ");
 					
 					foreach.getVariable().accept(cgen);
-					cgen.current.app(" <= ");
+					cgen.current.app(isInclusive ? " <= " : "<");
 					upper.accept(cgen);
 					
 					cgen.current.app("; ");
@@ -69,7 +70,7 @@ public class ControlStatementWriter {
 					cgen.current.app("; ");
 					
 					foreach.getVariable().accept(cgen);
-					cgen.current.app(" >= ");
+					cgen.current.app(isInclusive ? " >= " : ">");
 					upper.accept(cgen);
 					
 					cgen.current.app("; ");
@@ -99,7 +100,7 @@ public class ControlStatementWriter {
 		
 				cgen.current.app(" && ");
 				foreach.getVariable().accept(cgen);
-				cgen.current.app(" <= ");
+				cgen.current.app(isInclusive ? " <= " : "<");
 				range.getUpper().accept(cgen);
 			
 				cgen.current.app(") || (");
@@ -110,7 +111,7 @@ public class ControlStatementWriter {
 		
 				cgen.current.app(" && ");
 				foreach.getVariable().accept(cgen);
-				cgen.current.app(" >= ");
+				cgen.current.app(isInclusive ? " >= " : ">");
 				range.getUpper().accept(cgen);
 			
 				cgen.current.app("); ");
