@@ -40,17 +40,97 @@ public class ControlStatementWriter {
 	public static void writeForeach(Foreach foreach, CGenerator cgen) throws IOException {
 		if(foreach.getCollection() instanceof RangeLiteral) {
 			RangeLiteral range = (RangeLiteral) foreach.getCollection();
+			
 			cgen.current.app("for (");
+			
 			foreach.getVariable().accept(cgen);
 			cgen.current.app(" = ");
-			range.getLower().accept(cgen);
-			cgen.current.app("; ");
-			foreach.getVariable().accept(cgen);
-			cgen.current.app(" < ");
-			range.getUpper().accept(cgen);
-			cgen.current.app("; ");
-			foreach.getVariable().accept(cgen);
-			cgen.current.app("++").app(")").openBlock();
+			
+			if (range.getUpper() instanceof IntLiteral && range.getLower() instanceof IntLiteral) {
+				IntLiteral lower, upper;
+				lower = (IntLiteral)range.getLower();
+				upper = (IntLiteral)range.getUpper();
+				
+				if ( lower.getValue().compareTo(upper.getValue()) <= 0 ) {
+					lower.accept(cgen);
+					cgen.current.app("; ");
+					
+					foreach.getVariable().accept(cgen);
+					cgen.current.app(" <= ");
+					upper.accept(cgen);
+					
+					cgen.current.app("; ");
+					foreach.getVariable().accept(cgen);
+					cgen.current.app("++");
+				}
+				else
+				{
+					lower.accept(cgen);
+					cgen.current.app("; ");
+					
+					foreach.getVariable().accept(cgen);
+					cgen.current.app(" >= ");
+					upper.accept(cgen);
+					
+					cgen.current.app("; ");
+					foreach.getVariable().accept(cgen);
+					cgen.current.app("--");
+				}
+			}
+			else
+			{
+				cgen.current.app("(");
+					range.getLower().accept(cgen);
+					cgen.current.app(" <= ");
+					range.getUpper().accept(cgen);
+			
+					cgen.current.app(" ? ");
+					range.getLower().accept(cgen);
+			
+					cgen.current.app(" : ");
+					range.getLower().accept(cgen);
+				cgen.current.app(")");
+			
+				cgen.current.app("; (");
+			
+				range.getLower().accept(cgen);
+				cgen.current.app(" <= ");
+				range.getUpper().accept(cgen);
+		
+				cgen.current.app(" && ");
+				foreach.getVariable().accept(cgen);
+				cgen.current.app(" <= ");
+				range.getUpper().accept(cgen);
+			
+				cgen.current.app(") || (");
+			
+				range.getLower().accept(cgen);
+				cgen.current.app(" > ");
+				range.getUpper().accept(cgen);
+		
+				cgen.current.app(" && ");
+				foreach.getVariable().accept(cgen);
+				cgen.current.app(" >= ");
+				range.getUpper().accept(cgen);
+			
+				cgen.current.app("); ");
+			
+				cgen.current.app("(");
+					range.getLower().accept(cgen);
+					cgen.current.app(" <= ");
+					range.getUpper().accept(cgen);
+			
+					cgen.current.app(" ? ");
+					foreach.getVariable().accept(cgen);
+					cgen.current.app("++");
+			
+					cgen.current.app(" : ");
+					foreach.getVariable().accept(cgen);
+					cgen.current.app("--");
+				cgen.current.app(")");
+			}
+			
+			cgen.current.app(")").openBlock();
 			foreach.getBody().accept(cgen);
 			cgen.current.closeBlock();
 		} else { 
