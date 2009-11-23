@@ -121,9 +121,16 @@ public class ExpressionParser {
 					throw new CompilationFailedError(sReader.getLocation(reader.peek()),
 							"Expected expression for the upper part of a range literal");
 				}
-				// this is so beautiful it makes me wanna cry
-				expr = new RangeLiteral(expr, upper, false, expr.startToken);
 				
+				boolean isInclusive = false;
+				Token inclToken = reader.peek();
+				if(inclToken.type == TokenType.INCLUSIVE_KW || inclToken.type == TokenType.EXCLUSIVE_KW) {
+					reader.skip();
+					isInclusive = (inclToken.type == TokenType.INCLUSIVE_KW);
+				}
+
+				// this is so beautiful it makes me wanna cry
+				expr = new RangeLiteral(expr, upper, isInclusive, expr.startToken);
 			}
 			
 			if(token.type == TokenType.OPEN_SQUAR) {
